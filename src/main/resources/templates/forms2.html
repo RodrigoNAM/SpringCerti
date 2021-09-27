@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+	<title></title>
+	<style>
+		#div1 {
+			overflow:scroll;
+			height:200px;
+		}
+		
+		#div2 {
+			overflow:scroll;
+			height:140px;
+		}
+		
+		#div1 table {
+			background-color:lightgray;
+		}
+		#div2 table {
+			background-color:lightgray;
+		}
+	
+      table,
+      th,
+      td {
+        padding: 10px;
+        border-collapse: collapse;
+        width: 98%;        
+      }
+      .center {
+		  margin-left: auto;
+		  margin-right: auto;
+		}
+		label {
+        display: inline-block;
+        width: 180px;
+        text-align: right;
+      }
+		table tr:not(:first-child){
+			cursor: pointer;transition: all .25s ease-in-out;
+		}
+		table tr:not(:first-child):hover{
+			background-color: #ddd;
+		}
+    </style>
+    
+</head>
+<body>
+	<table class="center">
+		<tr>
+			<th style="width: 30%;">
+				<form th:object="${per}" th:action="@{/expedientes/Buscar/}" th:method="get">
+					<div id="div2">
+					<table style="position: relative; margin-top: 0px;">
+						<tr>
+						<th style="width: 50%;">
+					    <label>NRO. EXPEDIENTE: </label>
+					    <th style="width: 50%;">
+					    <input type="text" name="nro_expediente" id="nro_expediente" th:value="*{nro_expediente}">					    
+						</tr>
+						<tr>
+						<th style="width: 50%;">
+					    <label>TIPO DE DOCUMENTO: </label>
+					    <th style="width: 50%;">
+					    <input type="text" name="tipo_de_documento" id="tipo_de_documento" th:value="*{tipo_de_documento}">					    
+						</tr>
+						<tr>
+						<th style="width: 50%;">
+					    <label>NRO. DOCUMENTO: </label>
+					    <th style="width: 50%;">
+					    <input type="text" name="numero_del_documento" id="numero_del_documento" th:value="*{numero_del_documento}">					    
+						</tr>
+						<tr>
+						<th style="width: 50%;">
+					    <label>FECHA: </label>
+					    <th style="width: 50%;">
+					    <input type="text" name="fecha_del_documento" id="fecha_del_documento" th:value="*{fecha_del_documento}">					    
+						</tr>
+						<tr>
+						<th style="width: 50%;">
+					    <label>CANT. IMÁGENES: </label>
+					    <th style="width: 50%;">
+					    <input type="text" name="numero_de_imagenes" id="numero_de_imagenes" th:value="*{numero_de_imagenes}">					    
+						</tr>
+						<tr>
+				  		<th style="width: 50%;">
+					    <label>NOMBRE DEL PDF: </label>
+					    <th style="width: 50%;">					    					    
+					    <input type="text" name="nombre_archivo" id="nombre_archivo" th:value="*{nombre_archivo}">		    					  	
+						</tr>						
+					</table>
+					</div>
+					<br>
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" name="checker"><label class="form-check-label" for="flexSwitchCheckDefault">Busqueda Especifica</label>
+						<button type="button" class="btn btn-outline-secondary" style="margin-left: 30px;" onclick="limpiar()">Limpiar</button>
+						<button type="submit" class="btn btn-outline-secondary" style="float: right; margin-right: 0px;" name="boton1">Buscar</button>
+					</div>
+				</form>
+			<th style="width: 70%;">
+				<div id="div1">
+					<form>
+					  <table style="position: relative; margin-top: 0px;" id="table">
+					  	<thead>
+						    <tr>
+						      <th class="tablita" style="width: 20%;">Nro. Exp</th>
+						      <th class="tablita" style="width: 16%;">Tipo</th>
+						      <th class="tablita" style="width: 16%;">Nro. Doc</th>
+						      <th class="tablita" style="width: 16%;">Fecha</th>
+						      <th class="tablita" style="width: 16%;">Cant. Imgs.</th>
+						      <th class="tablita" style="width: 16%;">Nombre</th>
+						    </tr>
+						</thead>
+						<th:block th:each="per : ${personas}">
+				    		<tr>
+				    			<td th:text="${per.nro_expediente}" style="width: 20%; background-color: #F5F5F5;">...</td>
+				    			<td th:text="${per.tipo_de_documento}" style="width: 16%; background-color: #F5F5F5;">...</td>
+				    			<td th:text="${per.numero_del_documento}" style="width: 16%; background-color: #F5F5F5;">...</td>
+				    			<td th:text="${per.fecha_del_documento}" style="width: 16%; background-color: #F5F5F5;">...</td>
+				    			<td th:text="${per.numero_de_imagenes}" style="width: 16%; background-color: #F5F5F5;">...</td>
+				    			<td th:text="${per.nombre_archivo}" style="width: 16%; background-color: #F5F5F5;">...</td>
+				    		</tr>
+				    	</th:block>
+					  </table>
+					  <br><br><br><br><br>
+					</form>
+				</div>
+			</th>
+		</tr>
+	</table>
+	<br>
+	<th:block th:each="per : ${personas1}">
+		<div> 
+			<embed id="embebido" th:src="@{'/images/'+${per.nombre_archivo}}" type="application/pdf" width="100%" height="800px" />
+		</div>
+	</th:block>
+	<script>
+	
+	function limpiar(){
+		document.getElementById("nro_expediente").value = "";
+		document.getElementById("tipo_de_documento").value = "";
+		document.getElementById("numero_del_documento").value = "";
+		document.getElementById("fecha_del_documento").value = "";
+		document.getElementById("numero_de_imagenes").value = "";
+		document.getElementById("nombre_archivo").value = "";
+	}
+	
+		var table = document.getElementById('table');             
+		for(var i = 1; i < table.rows.length; i++)
+		{
+			table.rows[i].onclick = function()
+			{
+				//rIndex = this.rowIndex;
+				document.getElementById("nro_expediente").value = this.cells[0].innerHTML;
+				document.getElementById("tipo_de_documento").value = this.cells[1].innerHTML;
+				document.getElementById("numero_del_documento").value = this.cells[2].innerHTML;
+				document.getElementById("fecha_del_documento").value = this.cells[3].innerHTML;
+				document.getElementById("numero_de_imagenes").value = this.cells[4].innerHTML;
+				document.getElementById("nombre_archivo").value = this.cells[5].innerHTML;
+			};
+		}    
+	</script>	
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</body>
+</html>
